@@ -2,6 +2,7 @@ import '../../../core/http/http_service.dart';
 import '../models/xboard_user_info_models.dart';
 import '../../../core/models/api_response.dart';
 import '../../../core/exceptions/xboard_exceptions.dart';
+import '../../../api/interfaces/user_api.dart';
 
 /// XBoard 用户信息 API 实现
 class XBoardUserInfoApi {
@@ -25,10 +26,8 @@ class XBoardUserInfoApi {
   Future<ApiResponse<bool>> validateToken() async {
     try {
       final result = await _httpService.getRequest('/api/v1/user/getSubscribe');
-      // 如果能成功获取订阅信息，说明token有效
       return ApiResponse.fromJson(result, (json) => json['subscribe_url'] != null);
     } catch (e) {
-      // 如果请求失败（401等），说明token无效
       return ApiResponse(
         success: false,
         message: 'Token validation failed',
@@ -80,6 +79,7 @@ class XBoardUserInfoApi {
       throw ApiException('切换到期提醒失败: $e');
     }
   }
+
   Future<ApiResponse<void>> updateUserInfo(Map<String, dynamic> data) async {
     try {
       final result = await _httpService.postRequest('/api/v1/user/update', data);
@@ -87,6 +87,38 @@ class XBoardUserInfoApi {
     } catch (e) {
       if (e is XBoardException) rethrow;
       throw ApiException('更新用户信息失败: $e');
+    }
+  }
+
+  Future<ApiResponse<RealNameStatus>> getRealNameStatus() async {
+    try {
+      final result = await _httpService.getRequest('/api/v1/user/realName/status');
+      return ApiResponse.fromJson(
+        result,
+        (json) => RealNameStatus.fromJson(json as Map<String, dynamic>),
+      );
+    } catch (e) {
+      if (e is XBoardException) rethrow;
+      throw ApiException('获取实名状态失败: $e');
+    }
+  }
+
+  Future<ApiResponse<RealNamePreconsultResult>> startRealNameVerify({
+    required String realName,
+    required String certNo,
+  }) async {
+    try {
+      final result = await _httpService.postRequest('/api/v1/user/realName/preconsult', {
+        'real_name': realName,
+        'cert_no': certNo,
+      });
+      return ApiResponse.fromJson(
+        result,
+        (json) => RealNamePreconsultResult.fromJson(json as Map<String, dynamic>),
+      );
+    } catch (e) {
+      if (e is XBoardException) rethrow;
+      throw ApiException('发起实名认证失败: $e');
     }
   }
 }

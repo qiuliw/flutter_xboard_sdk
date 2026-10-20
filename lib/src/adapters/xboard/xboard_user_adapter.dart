@@ -26,13 +26,11 @@ class XBoardUserAdapter implements UserApi {
 
   @override
   Future<bool> changePassword(String oldPassword, String newPassword) async {
-    // TODO: Implement changePassword
     throw UnimplementedError();
   }
 
   @override
   Future<bool> resetSecurity() async {
-    // TODO: Implement resetSecurity
     throw UnimplementedError();
   }
 
@@ -55,5 +53,31 @@ class XBoardUserAdapter implements UserApi {
       uuid: info.uuid,
       avatarUrl: info.avatarUrl,
     );
+  }
+
+  @override
+  Future<RealNameStatus> getRealNameStatus() async {
+    final response = await _api.getRealNameStatus();
+    final data = response.data;
+    if (data == null) {
+      throw Exception('Real name status is null');
+    }
+    return data;
+  }
+
+  @override
+  Future<RealNamePreconsultResult> startRealNameVerify({
+    required String realName,
+    required String certNo,
+  }) async {
+    final response = await _api.startRealNameVerify(
+      realName: realName,
+      certNo: certNo,
+    );
+    final data = response.data;
+    if (data == null) {
+      throw Exception('Real name preconsult result is null');
+    }
+    return data;
   }
 }

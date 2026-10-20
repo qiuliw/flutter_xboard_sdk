@@ -54,4 +54,17 @@ class V2BoardUserAdapter implements UserApi {
       avatarUrl: info.avatarUrl,
     );
   }
+
+  @override
+  Future<RealNameStatus> getRealNameStatus() {
+    throw UnimplementedError('Real name verification is not supported on V2Board');
+  }
+
+  @override
+  Future<RealNamePreconsultResult> startRealNameVerify({
+    required String realName,
+    required String certNo,
+  }) {
+    throw UnimplementedError('Real name verification is not supported on V2Board');
+  }
 }
