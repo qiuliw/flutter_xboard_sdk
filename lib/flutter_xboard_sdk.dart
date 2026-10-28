@@ -2,6 +2,8 @@
 
 // ========== 核心SDK ==========
 export 'src/xboard_sdk.dart';
+export 'src/api/interfaces/acceleration_api.dart';
+export 'src/api/models/acceleration_models.dart';
 
 // ========== 核心基础设施 ==========
 // HTTP配置 (用户可能需要配置代理)

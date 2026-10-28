@@ -7,6 +7,7 @@ import 'core/exceptions/xboard_exceptions.dart';
 import 'core/logging/sdk_logger.dart';
 
 import 'api/interfaces/user_api.dart';
+import 'api/interfaces/acceleration_api.dart';
 import 'api/interfaces/plan_api.dart';
 import 'api/interfaces/order_api.dart';
 import 'api/interfaces/subscription_api.dart';
@@ -32,6 +33,12 @@ class XBoardSDK {
 
   // Unified APIs (Lazy Loaded)
   UserApi? _userApi;
+  AccelerationApi? _accelerationApi;
+
+  AccelerationApi get acceleration {
+    _checkInitialized();
+    return _accelerationApi ??= _apiFactory.createAccelerationApi();
+  }
   PlanApi? _planApi;
   OrderApi? _orderApi;
   SubscriptionApi? _subscriptionApi;
@@ -246,6 +253,7 @@ class XBoardSDK {
       
       // Reset all lazy loaded APIs
       _userApi = null;
+      _accelerationApi = null;
       _planApi = null;
       _orderApi = null;
       _subscriptionApi = null;

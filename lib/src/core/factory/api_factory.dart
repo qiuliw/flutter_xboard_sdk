@@ -50,8 +50,14 @@ import '../../adapters/v2board/v2board_payment_adapter.dart';
 import '../../adapters/v2board/v2board_auth_adapter.dart';
 
 import 'panel_type.dart';
+import '../../api/interfaces/acceleration_api.dart';
+import '../../panels/xboard/apis/xboard_acceleration_api.dart';
 
 class ApiFactory {
+  AccelerationApi createAccelerationApi() {
+    if (_panelType != PanelType.xboard) throw UnsupportedError('Application acceleration requires XBoard');
+    return XBoardAccelerationApi(_httpService);
+  }
   final PanelType _panelType;
   final HttpService _httpService;
 
